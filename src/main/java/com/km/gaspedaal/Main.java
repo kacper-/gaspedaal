@@ -18,7 +18,8 @@ public class Main {
 
 	private static ChromeOptions getOptions() {
 		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--headless", "--window-size=1920,1200","--ignore-certificate-errors", "--silent");
+		//options.addArguments("--headless", "--window-size=1920,1200","--ignore-certificate-errors", "--silent");
+		options.addArguments("--window-size=1920,1200","--ignore-certificate-errors", "--silent");
         options.setBinary("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome");
         options.addArguments("--remote-allow-origins=*");
 		return options;
@@ -26,12 +27,12 @@ public class Main {
 
 	private static void filterAndPrint(WebDriver driver) {
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
-		WebElement e = driver.findElement(By.id("search-results"));
+		WebElement e = driver.findElement(By.xpath("//input[@id='mainlist']"));
 		System.out.println(e.getText());
 	}
 }
