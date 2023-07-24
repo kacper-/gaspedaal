@@ -1,58 +1,26 @@
 package com.km.gaspedaal;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class Main {
     public static void main(String args[]) {
-        System.out.println("Calling...");
-        URL url;
-        try {
-            url = new URL("https://www.gaspedaal.nl/volkswagen?srt=df-a");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer content = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            in.close();
-            con.disconnect();
-            filterAndPrint(content.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+        String chromeDriverPath = "/Users/kacper/dev/chromedriver-mac-arm64/chromedriver";
+		System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 
-    private static void filterAndPrint(String s) {
-        String prefix = "<h4 class=\"font-bold text-xl ml-m flex-1 truncate pr-xs sm:ml-xs\">";
-        Pattern pattern = Pattern.compile(prefix);
-		Matcher matcher = pattern.matcher(s);
-        int count = 0;
-        int start, end;
-        
-        while(matcher.find()) {
-            start = matcher.start();
-            end = getPos(s, start);
-            if(end > 0 && end > start) {
-			    System.out.println(s.substring(start+prefix.length(), end));
-                count++;
-            }
-        }
-        System.out.println("count = "+count);
-    }
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--headless", "--window-size=1920,1200","--ignore-certificate-errors", "--silent");
+        options.setBinary("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome");
+        options.addArguments("--remote-allow-origins=*");
+		WebDriver driver = new ChromeDriver(options);
+		driver.get("https://www.autowereld.nl/goedkope-occasions");
 
-    private static int getPos(String s, int pos) {
-        Pattern pattern = Pattern.compile("</h4");
-		Matcher matcher = pattern.matcher(s);
-        while(matcher.find(pos)) {
-            return matcher.start();
-        }
-        return 0;
+		WebElement element = driver.findElement(By.xpath("//article"));
+        System.out.println(element.getText());
+
+		driver.quit();
     }
 }
