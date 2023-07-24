@@ -1,5 +1,8 @@
 package com.km.gaspedaal;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,10 +20,10 @@ public class Main {
         options.addArguments("--remote-allow-origins=*");
 		WebDriver driver = new ChromeDriver(options);
 		driver.get("https://www.autowereld.nl/goedkope-occasions");
-
-		WebElement element = driver.findElement(By.xpath("//article"));
-        System.out.println(element.getText());
-
+		
+		WebElement e = driver.findElement(By.id("search-results"));
+		System.out.println(e.getText());
+		
 		driver.quit();
     }
 }
